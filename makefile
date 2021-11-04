@@ -41,7 +41,7 @@ kind-up:
 	kubectl config set-context --current --namespace=service-system
 
 kind-apply:
-	cat zarf/k8s/base/service-pod/base-service.yaml | kubectl apply -f -
+	kustomize build zarf/k8s/kind/service-pod/ | kubectl apply -f -
 
 kind-down:
 	kind delete cluster --name $(KIND_CLUSTER)
@@ -58,3 +58,5 @@ kind-restart:
 	kubectl rollout restart deployment service-pod
 
 kind-update: all kind-load kind-restart
+
+kind-update-apply: all kind-load kind-apply
