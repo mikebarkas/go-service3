@@ -9,6 +9,7 @@ import (
 
 	"github.com/mikebarkas/service3/app/services/sales-api/handlers/debug/checkgrp"
 	"github.com/mikebarkas/service3/app/services/sales-api/handlers/v1/testgrp"
+	"github.com/mikebarkas/service3/business/web/mid"
 	"github.com/mikebarkas/service3/foundation/web"
 	"go.uber.org/zap"
 )
@@ -39,7 +40,10 @@ type APIMuxConfig struct {
 
 func APIMux(cfg APIMuxConfig) *web.App {
 
-	app := web.NewApp(cfg.Shutdown)
+	app := web.NewApp(
+		cfg.Shutdown,
+		mid.Logger(cfg.Log),
+	)
 	v1(app, cfg)
 	return app
 }
