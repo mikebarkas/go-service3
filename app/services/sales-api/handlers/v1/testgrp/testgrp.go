@@ -20,10 +20,15 @@ func (h Handlers) Test(ctx context.Context, w http.ResponseWriter, r *http.Reque
 	if n := rand.Intn(100); n%2 == 0 {
 		// return 500 and hide error message
 		// return errors.New("untrusted data")
+
 		// return 400 and display error message
 		// return validate.NewRequestError(errors.New("trusted error"), http.StatusBadRequest)
+
 		// k8s to restart system
-		return web.NewShutdownError("restarting service")
+		// return web.NewShutdownError("restarting service")
+
+		// Test panic recover() middleware
+		panic("testing panic")
 	}
 	status := struct {
 		Status string

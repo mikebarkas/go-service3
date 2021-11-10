@@ -44,6 +44,7 @@ func APIMux(cfg APIMuxConfig) *web.App {
 		cfg.Shutdown,
 		mid.Logger(cfg.Log),
 		mid.Errors(cfg.Log),
+		mid.Panics(),
 	)
 	v1(app, cfg)
 	return app
