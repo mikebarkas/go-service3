@@ -3,6 +3,7 @@ package testgrp
 
 import (
 	"context"
+	"math/rand"
 	"net/http"
 
 	"github.com/mikebarkas/service3/foundation/web"
@@ -16,6 +17,14 @@ type Handlers struct {
 
 // Test handler for development.
 func (h Handlers) Test(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
+	if n := rand.Intn(100); n%2 == 0 {
+		// return 500 and hide error message
+		// return errors.New("untrusted data")
+		// return 400 and display error message
+		// return validate.NewRequestError(errors.New("trusted error"), http.StatusBadRequest)
+		// k8s to restart system
+		return web.NewShutdownError("restarting service")
+	}
 	status := struct {
 		Status string
 	}{
