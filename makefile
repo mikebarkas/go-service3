@@ -27,6 +27,9 @@ tidy:
 	go mod tidy
 	go mod vendor
 
+keygen:
+	go run app/tooling/admin/main.go
+
 # ==============================================================================
 # Building containers
 
