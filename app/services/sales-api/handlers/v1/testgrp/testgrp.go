@@ -3,9 +3,11 @@ package testgrp
 
 import (
 	"context"
+	"errors"
 	"math/rand"
 	"net/http"
 
+	"github.com/mikebarkas/service3/business/sys/validate"
 	"github.com/mikebarkas/service3/foundation/web"
 	"go.uber.org/zap"
 )
@@ -22,13 +24,13 @@ func (h Handlers) Test(ctx context.Context, w http.ResponseWriter, r *http.Reque
 		// return errors.New("untrusted data")
 
 		// return 400 and display error message
-		// return validate.NewRequestError(errors.New("trusted error"), http.StatusBadRequest)
+		return validate.NewRequestError(errors.New("trusted error"), http.StatusBadRequest)
 
 		// k8s to restart system
 		// return web.NewShutdownError("restarting service")
 
 		// Test panic recover() middleware
-		panic("testing panic")
+		// panic("testing panic")
 	}
 	status := struct {
 		Status string
