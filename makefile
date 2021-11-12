@@ -3,6 +3,13 @@ SHELL := /bin/bash
 # ==============================================================================
 # Notes
 #
+# For testing a simple query on the system. Don't forget to `make seed` first.
+# curl --user "admin@example.com:gophers" http://localhost:3000/v1/users/token
+#
+# export TOKEN="COPY TOKEN STRING FROM LAST CALL"
+# curl -il http://localhost:3000/v1/testauth
+# curl -il -H "Authorization: Bearer ${TOKEN}" http://localhost:3000/v1/testauth
+#
 # Access metrics directly (4000) or through the sidecar (3001)
 # expvarmon -ports=":4000" -vars="build,requests,goroutines,errors,panics,mem:memstats.Alloc"
 # expvarmon -ports=":3001" -endpoint="/metrics" -vars="build,requests,goroutines,errors,panics,mem:memstats.Alloc"
@@ -27,7 +34,7 @@ tidy:
 	go mod tidy
 	go mod vendor
 
-keygen:
+admin:
 	go run app/tooling/admin/main.go
 
 # ==============================================================================

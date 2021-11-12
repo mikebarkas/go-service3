@@ -9,6 +9,7 @@ import (
 
 	"github.com/mikebarkas/service3/app/services/sales-api/handlers/debug/checkgrp"
 	"github.com/mikebarkas/service3/app/services/sales-api/handlers/v1/testgrp"
+	"github.com/mikebarkas/service3/business/sys/auth"
 	"github.com/mikebarkas/service3/business/web/mid"
 	"github.com/mikebarkas/service3/foundation/web"
 	"go.uber.org/zap"
@@ -36,6 +37,7 @@ func DebugStandardLibraryMux() *http.ServeMux {
 type APIMuxConfig struct {
 	Shutdown chan os.Signal
 	Log      *zap.SugaredLogger
+	Auth     *auth.Auth
 }
 
 func APIMux(cfg APIMuxConfig) *web.App {
@@ -78,5 +80,6 @@ func v1(app *web.App, cfg APIMuxConfig) {
 		Log: cfg.Log,
 	}
 	app.Handle(http.MethodGet, version, "/test", tgh.Test)
+	app.Handle(http.MethodGet, version, "/testauth", tgh.Test, mid.Authenticate(cfg.Auth), mid.Authorize("ADMIN"))
 
 }
