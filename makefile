@@ -25,6 +25,9 @@ SHELL := /bin/bash
 # openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
 # openssl rsa -pubout -in private.pem -out public.pem
 #
+# dblab
+# dblab --host 0.0.0.0 --user postgres --db postgres --pass postgres --ssl disable --port 5432 --driver postgres
+#
 # ==============================================================================
 
 run:
@@ -83,12 +86,20 @@ kind-load:
 	kind load docker-image sales-api-amd64:$(VERSION) --name $(KIND_CLUSTER)
 
 kind-apply:
+	kustomize build zarf/k8s/kind/database-pod | kubectl apply -f -
+	kubectl wait --namespace=database-system --timeout=120s --for=condition=Available deployment/database-pod
 	kustomize build zarf/k8s/kind/sales-pod/ | kubectl apply -f -
 
 kind-status:
 	kubectl get nodes -o wide
 	kubectl get svc -o wide
 	kubectl get po -o wide --watch
+
+kind-status-sales:
+	kubectl get po -o wide --watch
+
+kind-status-db:
+	kubectl get po -o wide --namespace=database-system
 
 kind-logs:
 	kubectl logs -l app=sales --all-containers=true -f --tail=100 | go run app/tooling/logfmt/main.go
