@@ -15,4 +15,5 @@ require (
 	github.com/lib/pq v1.10.4
 	go.uber.org/automaxprocs v1.4.0
 	go.uber.org/zap v1.19.1
+	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97
 )
