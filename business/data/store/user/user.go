@@ -53,10 +53,10 @@ func (s Store) Create(ctx context.Context, nu NewUser, now time.Time) (User, err
 	}
 
 	const q = `
-	INSET INTO users
+	INSERT INTO users
 		(user_id, name, email, password_hash, roles, date_created, date_updated)
 	VALUES
-		(:user_id, :name, :email, :password_has, :roles, :date_created, :date_updated)`
+		(:user_id, :name, :email, :password_hash, :roles, :date_created, :date_updated)`
 
 	if err := database.NamedExecContext(ctx, s.log, s.db, q, usr); err != nil {
 		return User{}, fmt.Errorf("inserting user: %w", err)
@@ -102,8 +102,8 @@ func (s Store) Update(ctx context.Context, claims auth.Claims, userID string, uu
 	UPDATE
 		users
 	SET
-		"name" = :name, "email" = :email, "roles" = :roles
-		password_hash = :password_hash, "date_updated" = :date_updated
+		"name" = :name, "email" = :email, "roles" = :roles,
+		"password_hash" = :password_hash, "date_updated" = :date_updated
 	WHERE
 		user_id = :user_id`
 
@@ -191,7 +191,7 @@ func (s Store) QueryByID(ctx context.Context, claims auth.Claims, userID string)
 	}
 
 	const q = `
-	SELCECT
+	SELECT
 		*
 	FROM
 		users
@@ -223,7 +223,7 @@ func (s Store) QueryByEmail(ctx context.Context, claims auth.Claims, email strin
 	}
 
 	const q = `
-	SELCECT
+	SELECT
 		*
 	FROM
 		users
